@@ -3,8 +3,6 @@ precision mediump float;
 precision mediump int;
 #endif
 
-#define PROCESSING_LIGHT_SHADER
-
 uniform float fraction;
 
 varying vec4 vertColor;
