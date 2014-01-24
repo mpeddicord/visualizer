@@ -1,7 +1,6 @@
 uniform mat4 transform;
 uniform mat3 normalMatrix;
 uniform vec3 lightNormal;
-uniform vec4 customColor;
 
 attribute vec4 vertex;
 attribute vec4 color;
@@ -13,7 +12,7 @@ varying vec3 vertLightDir;
 
 void main() {
   gl_Position = transform * vertex;  
-  vertColor = customColor;//color;
+  vertColor = color;
   vertNormal = normalize(normalMatrix * normal);
   vertLightDir = -lightNormal;
 }

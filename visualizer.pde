@@ -9,9 +9,7 @@ void setup() {
   
 }
 
-void draw() {
-  toon.set("customColor", 1, 1, 1, 1);
-  
+void draw() {  
   shader(toon);
   background(0); 
   float dirY = (mouseY / float(height) - 0.5) * 2;
