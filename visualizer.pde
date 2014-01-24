@@ -5,11 +5,11 @@ void setup() {
   noStroke();
   fill(204);
   toon = loadShader("frag.glsl", "vert.glsl");
-  toon.set("fraction", 1.0);
-  
+  toon.set("fraction", 0.5);
 }
 
-void draw() {  
+void draw() {
+  toon.set("colorin", random(1), random(1), random(1));
   shader(toon);
   background(0); 
   float dirY = (mouseY / float(height) - 0.5) * 2;
