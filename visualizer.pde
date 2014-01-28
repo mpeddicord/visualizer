@@ -1,90 +1,69 @@
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
-Minim minim;
-//AudioInput micInput;
-AudioPlayer audioInput;
-BeatDetect beat;
+BeatSphere beatSphere1;
+BeatSphere beatSphere2;
+BeatSphere beatSphere3;
 
-PShader toon;
-AudioPlayer audio;
-
-float currY = 0;
-float currX = 0;
-
-float newY = 0;
-float newX = 0;
-
-float lastChange = 0;
+BeatSphere[] beatSpheres;
+int balls = 100;
  
 void setup() {
-  minim = new Minim(this);
-  audio = minim.loadFile("samo.mp3");
-  audio.play();
-  //micInput = minim.getLineIn(Minim.STEREO, 512, 44100f, 16);
-  
-  //audioInput = minim.loadFile("samo.mp3");
-  //audioInput.play();
-  
-  beat = new BeatDetect();
-  
-  frameRate(30);
-  
   size(640, 360, P3D);
   noStroke();
-  fill(204);
+  frameRate(30);
+
+  if(testLabEnabled) testLabSetup();
+    
+  beatSpheres = new BeatSphere[balls];
+  for(int i = 0; i < balls; i++)
+  {
+    beatSpheres[i] = new BeatSphere(new PVector(0,0,30), 15, loadShader("frag.glsl", "vert.glsl"));
+  }
   
-  toon = loadShader("frag.glsl", "vert.glsl");
-  toon.set("fraction", 0.5);
+  /*
+  beatSphere1 = new BeatSphere(new PVector(0,0,30), 15, loadShader("frag.glsl", "vert.glsl"));
+  beatSphere2 = new BeatSphere(new PVector(0,0,30), 15, loadShader("frag.glsl", "vert.glsl"));
+  beatSphere3 = new BeatSphere(new PVector(0,0,30), 15, loadShader("frag.glsl", "vert.glsl"));
+  */  
 }
 
 void draw() {
-  background(0);
-  //stroke(255); 
-  
-  toon.set("colorin", random(1), random(1), random(1));
-  toon.set("time", millis());
-  shader(toon);
-  
-  float dirY = 0;//(mouseY / float(height) - 0.5) * 2;
-  float dirX = 0;//(mouseX / float(width) - 0.5) * 2;
-  
-  int now = millis();
-  
-  beat.detect(audio.mix);
-  
-  //if(beat.isOnset()) {
-  //  sphere(250); 
-  //} else {
-  //  sphere(120); 
-  //}
-  if(beat.isOnset())//now - lastChange > 5000) //onBeat
-  {
-    lastChange = now;
-    newY = (random(2) - 1);
-    newX = (random(2) - 1); 
-  }
-  
-  currY += (newY - currY) * 0.1;
-  currX += (newX - currX) * 0.1;
-  
-  println(currY);
-  println(currX);
-  
-  directionalLight(204, 204, 204, currY, currX, -1);
-  
+  background(122);  
   translate(width/2, height/2);
-  sphere(120 + (audio.mix.get(0) * 50));
   
-  //sphere(lerp(120, 120 + (audioInput.left.get(0) * 50), 10));
+  float dirY = (mouseY / float(height) - 0.5) * 2;
+  float dirX = (mouseX / float(width) - 0.5) * 2;
   
-
+  directionalLight(255, 255, 255, dirX, dirY, -1);
   
-  
-  
-  /*for(int i = 0; i < micInput.bufferSize() - 1; i++)
+  float now = millis();
+  float thirdCircle = 2*PI/3;
+  float spacing = 100;
+  float timeMult = 0.001;
+  now *= timeMult;
+  /*
+  beatSphere1.setPos(cos(now + thirdCircle) * spacing, sin(now + thirdCircle) * spacing, 0);
+  beatSphere2.setPos(cos(now + thirdCircle * 2) * spacing, sin(now + thirdCircle * 2) * spacing, 0);
+  beatSphere3.setPos(cos(now + thirdCircle * 3) * spacing, sin(now + thirdCircle * 3) * spacing, 0);
+  */
+  float ciclePart = 2*PI/ balls;
+  for(int i = 0; i < balls; i++)
   {
-    line(i, 50 + micInput.left.get(i)*50, i+1, 50 + micInput.left.get(i+1)*50);
-    line(i, 150 + micInput.right.get(i)*50, i+1, 150 + micInput.right.get(i+1)*50);
-  }*/
+    beatSpheres[i].setPos(cos(now + ciclePart * i) * spacing, sin(now + ciclePart * i) * spacing, 0);
+    beatSpheres[i].update();
+    beatSpheres[i].draw();
+  }
+  /*
+  beatSphere1.update();
+  beatSphere1.draw();
+  beatSphere2.update();
+  beatSphere2.draw();
+  beatSphere3.update();
+  beatSphere3.draw();
+  */
+  
+  
+  if(testLabEnabled) testLabDraw();
 }
+

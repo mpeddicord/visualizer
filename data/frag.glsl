@@ -17,11 +17,11 @@ void main() {
   if (intensity > pow(0.95, fraction)) {
     color = vec4(vec3(1.0), 1.0);
   } else if (intensity > pow(0.5, fraction)) {
-    color = vec4(vec3(0.6), 1.0);
+    color = vec4(vec3(0.8), 1.0);
   } else if (intensity > pow(0.25, fraction)) {
-    color = vec4(vec3(0.4), 1.0);
+    color = vec4(vec3(0.6), 1.0);
   } else {
-    color = vec4(vec3(0.2), 1.0);
+    color = vec4(vec3(0.4), 1.0);
   }
 
   gl_FragColor = color * vertColor;  
